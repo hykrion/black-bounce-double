@@ -1,16 +1,16 @@
 <p align="center">
-  <img src="/img/sigma-l-wh.PNG">
+  <img src="/img/sigma-l-wh.png">
 </p>
 
 # black_bounce_double
-Implementation of a black bounce (BB) where we can bounce between Schwarzschild an wormhole (WH) configuration just changing a single parameter.
+Implementation of a black bounce (BB) where we can bounce between Schwarzschild and a wormhole (WH) configuration just changing a single parameter.
 The two main papers to develop this code were:
 
 - Merce Guerrero, Gonzalo J. Olmo, Diego Rubiera-Garcia, Diego
 Sáez-Chillón Gómez, Shadows and optical appearance of black bounces illuminated
 by a thin accretion disk arXiv:2105.15073v2 [gr-qc] DOI 10.1088/1475-
 7516/2021/08/036
--Adria Delhom, Caio F. B. Macedo, Gonzalo J. Olmo, Luís C. B.
+- Adria Delhom, Caio F. B. Macedo, Gonzalo J. Olmo, Luís C. B.
 Crispino (2019), Absorption by black hole remnants in metric-affine gravity.
 arXiv:1906.06411v1 [gr-qc] DOI 10.1103/PhysRevD.100.024016
 
