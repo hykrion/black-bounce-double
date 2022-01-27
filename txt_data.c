@@ -5,6 +5,7 @@
 #include "header/tortoise.h"
 
 #include <stdio.h>
+#include <math.h>
 
 static int m_nodes;
 
@@ -82,7 +83,8 @@ txt_data_rt()
   for (i = 0; i < nW; i++)
   {
     w = wMin + hW*i;
-    fprintf(fp, "%.32f\t%.32f\t%.32f\t%.32f\n", w, R[i], T[i], R[i] + T[i]);
+    double err = log10(fabs(1 - R[i] - T[i]));
+    fprintf(fp, "%.32f\t%.32f\t%.32f\t%.32f\t%.32f\n", w, R[i], T[i], R[i] + T[i], err);
   }
   fclose(fp);
 }

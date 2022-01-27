@@ -76,16 +76,28 @@ proc writeGnuplotSettings {} {
   lappend fileContent {set title 'Coeficientes R y T'}
   lappend fileContent {set xrange [0.0 : 1.0]}
   lappend fileContent {set yrange [0.0 : 1.2]}
+  lappend fileContent {set xlabel 'ω'}
   lappend fileContent {plot 'coefficients.txt' using 1:2 with lines lc "green" title "R", 'coefficients.txt' using 1:3 with lines lc "red" title "T", 'coefficients.txt' using 1:4 with lines title "R + T"}
   
   writeGnuplotFile "plot-k.gnu" $fileContent
   
+  # Log10 del error en el cálculo R + T = 1
+  set fileContent {}
+  lappend fileContent {set title 'log10|1 - R - T|'}
+  lappend fileContent {set xrange [0.0 : 1.0]}
+  lappend fileContent {set yrange [-20.0 : 0]}
+  lappend fileContent {set xlabel 'ω'}
+  lappend fileContent {plot 'coefficients.txt' using 1:5 with lines lc "red" title "log10 Err"}
+  
+  writeGnuplotFile "plot-k-err.gnu" $fileContent
+
   # Sigma
   set fileContent {}
   lappend fileContent {set title 'σ_l'}
   lappend fileContent {set xrange [0.0 : 1.0]}
   lappend fileContent {set yrange [0.0 : 180.0]}
-  lappend fileContent {plot 'sigma-l.txt' using 1:2 with lines lc "red" title "σ / w"}
+  lappend fileContent {set xlabel 'ω'}
+  lappend fileContent {plot 'sigma-l.txt' using 1:2 with lines lc "red" title "σ"}
   
   writeGnuplotFile "plot-sigma.gnu" $fileContent
 
@@ -94,6 +106,7 @@ proc writeGnuplotSettings {} {
   lappend fileContent {set title 'σ_l'}
   lappend fileContent {set xrange [0.0 : 1.0]}
   lappend fileContent {set yrange [0.0 : 180.0]}
+  lappend fileContent {set xlabel 'ω'}
   lappend fileContent {plot 'sigma_l_bh_wh.txt' using 1:2 with lines lc "red" title "BH", 'sigma_l_bh_wh.txt' using 1:3 with lines lc "blue" title "WH"}
   
   writeGnuplotFile "plot-sigma-bh-wh.gnu" $fileContent
@@ -162,6 +175,10 @@ proc cmd_replot {} {
   set gnuplotCmd [list gnuplot.exe -p plot-k.gnu]
   runExe $gnuplotCmd
 
+  # Log10 err RT
+  set gnuplotCmd [list gnuplot.exe -p plot-k-err.gnu]
+  runExe $gnuplotCmd
+
   # Sigma
   set gnuplotCmd [list gnuplot.exe -p plot-sigma.gnu]
   runExe $gnuplotCmd
@@ -211,6 +228,30 @@ proc cmd_mezclar_sigma_l {} {
   runExe $gnuplotCmd
 }
 
+# -----------------------------------------------------------------------------
+# @brief  Validar el valor de nW
+# -----------------------------------------------------------------------------
+proc cmd_validate_nW {value} {
+  set result 0
+  
+  if {$value < $::uiCommon(Nodos)} {
+    set $::uiCommon(nW) $value
+    set result 1
+  }
+  
+  return $result
+}
+
+# -----------------------------------------------------------------------------
+# @brief  No permitir que nW sea mayor que el número de nodos
+# -----------------------------------------------------------------------------
+proc cmd_invalid_nW {widget} {
+  set uiCommon(nW) $::uiCommon(Nodos)
+  $widget delete 0 end
+  $widget insert 0 $::uiCommon(Nodos)
+  tk_messageBox -type ok -message "nW ha de ser menor que el n\u00FAmero de nodos"
+}
+
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # UI
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -246,12 +287,19 @@ proc ui_numerico {} {
 proc ui_fisico {} {
   set mainFrame [frame .ntb.frmFisico.frmMain]
   
-  foreach id {l nL rS wMin wMax nW aa} {
+  foreach id {l nL rS wMin wMax aa} {
     set w1 [label $mainFrame.lbl$id -text "$id: "]
     set w2 [entry $mainFrame.ent$id -textvariable uiCommon($id) -width 5 -background white]
     
     grid $w1 $w2
   }
+  # Para el número de nodos de W (nW), no vamos a dejar que sea mayor que el número
+  # de nodos de la integración. Además de que no creo que tenga sentido se produce
+  # un error en la memoria dinámica (ver phi_init)
+  set w1 [label $mainFrame.lblnW -text "nW: "]
+  set w2 [entry $mainFrame.entnW -width 5 -background white -validate focusout -validatecommand {cmd_validate_nW %s} -invalidcommand {cmd_invalid_nW %W}]
+  $mainFrame.entnW insert 0 $::uiCommon(nW)
+  grid $w1 $w2
   
   # Layout
   grid $mainFrame -sticky ew
