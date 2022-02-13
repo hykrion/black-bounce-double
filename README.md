@@ -45,3 +45,6 @@ These're the results for a WH, using *aa = 2.5*
 ![Black Bounce - BH reflexion transmision coefficients](/img/reflexion-transmision-wh.PNG)
 
 ![Black Bounce - BH sigma-l](/img/sigma-l-wh.png)
+
+# Documentation
+For  more information you can consult the pdf's in the *doc* folder (English version it's just an automatic translation)
