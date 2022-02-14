@@ -47,4 +47,4 @@ These're the results for a WH, using *aa = 2.5*
 ![Black Bounce - BH sigma-l](/img/sigma-l-wh.png)
 
 # Documentation
-For  more information you can consult the pdf's in the *doc* folder (English version it's just an automatic translation)
+For  more information you can consult the pdf's in the *doc* folder (English version is just an automatic translation)
