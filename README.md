@@ -47,4 +47,4 @@ These're the results for a WH, using *aa = 2.5*
 ![Black Bounce - BH sigma-l](/img/sigma-l-wh.png)
 
 # Documentation
-For  more information you can consult the pdf in the *doc* folder (English version is just an automatic translation)
+For  more information you can consult the [pdf](https://github.com/hykrion/tfm-docs/blob/main/plantilla-en.pdf)
